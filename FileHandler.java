@@ -29,9 +29,17 @@ public class FileHandler {
 
     }
 
-    public void handleCC(){
+    public ArrayList<EmployeePositionInfo> handleEmployeePositionInfos(){
+        ArrayList<EmployeePositionInfo> info = new ArrayList<EmployeePositionInfo>();
+
+        return info;
+    }
+
+    public ArrayList<CC> handleCC(){
         String xlsxFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/CC.xlsx";
-        HashMap CC = new HashMap();
+
+        ArrayList<CC> CCs = new ArrayList<CC>();
+
         try {
             FileInputStream fis = new FileInputStream(new File(xlsxFileAddress));
             XSSFWorkbook workbook = new XSSFWorkbook(fis);
@@ -43,7 +51,15 @@ public class FileHandler {
             while (rowIterator.hasNext())
             {
                 row = (XSSFRow) rowIterator.next();
+
+                if(!isCCRow(row)){ //skip row unless it is a valid row
+                    continue;
+                }
+
                 Iterator<Cell> cellIterator = row.cellIterator();
+                int cellnum = 0;
+                CC cc = new CC();
+                String name = "";
 
                 while (cellIterator.hasNext())
                 {
@@ -51,23 +67,51 @@ public class FileHandler {
                     switch (cell.getCellType())
                     {
                         case Cell.CELL_TYPE_NUMERIC:
+                            if (cellnum == 1){
+                                cc.setEmpID((int)cell.getNumericCellValue());
+                            }
+                            if(cellnum == 2){
+                                name = "Patio " + cellnum;
+                            }
+                            if(cellnum == 5){
+                                cc.setTips((float)cell.getNumericCellValue());
+                            }
+                            if(cellnum == 6){
+                                cc.setSales((float) cell.getNumericCellValue());
+                            }
 
                             break;
                         case Cell.CELL_TYPE_STRING:
+                            if (cellnum == 2){
+                                name = cell.getStringCellValue();
+                            }
+                            if(cellnum == 3){
+                                name += ", " + cell.getStringCellValue();
+                            }
 
                             break;
                     }
+                    cellnum++;
                 }
+
+                CCs.add(cc);
             }
 
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
+
+        return CCs;
 
     }
 
     public boolean isCCRow(XSSFRow row){
+
+        if(row.getLastCellNum() > 6) {
+            return true;
+        }
+
         boolean CC = false;
         Iterator<Cell> cellIterator = row.cellIterator();
 
@@ -86,6 +130,29 @@ public class FileHandler {
         }
 
         return true;
+
+    }
+
+    public HashMap<String, Integer> getEmpKeys(){
+        HashMap<String, Integer> empKeys = new HashMap<String, Integer>();
+        String textFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/EmployeeKeys";
+        try {
+            FileInputStream fstream = new FileInputStream("/Users/ralfpopescu/PTPayroll/src/sample/EmployeeKeys.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split("\\s+");
+                String name = split[1] + split[2];
+                int num = Integer.parseInt(split[0]);
+                empKeys.put(name, num);
+
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return empKeys;
 
     }
 
