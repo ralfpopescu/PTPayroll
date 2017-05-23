@@ -29,8 +29,31 @@ public class FileHandler {
 
     }
 
-    public ArrayList<EmployeePositionInfo> handleEmployeePositionInfos(){
+    public ArrayList<EmployeePositionInfo> handleEmployeePositionInfos() {
         ArrayList<EmployeePositionInfo> info = new ArrayList<EmployeePositionInfo>();
+        String xlsxFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/Timesheets.xlsx";
+        try {
+            FileInputStream fis = new FileInputStream(new File(xlsxFileAddress));
+            XSSFWorkbook workbook = new XSSFWorkbook(fis);
+            XSSFSheet spreadsheet = workbook.getSheetAt(0);
+
+            Iterator<Row> rowIterator = spreadsheet.iterator();
+            XSSFRow row;
+
+            while (rowIterator.hasNext()) {
+                row = (XSSFRow) rowIterator.next();
+                Iterator<Cell> cellIterator = row.cellIterator();
+
+                while (cellIterator.hasNext()) {
+                }
+
+            }
+
+
+            return info;
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         return info;
     }
