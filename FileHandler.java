@@ -1,5 +1,6 @@
 package sample;
 import java.io.*;
+import java.util.HashMap;
 import java.util.Iterator;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -25,6 +26,66 @@ public class FileHandler {
 
 
     public FileHandler(){
+
+    }
+
+    public void handleCC(){
+        String xlsxFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/CC.xlsx";
+        HashMap CC = new HashMap();
+        try {
+            FileInputStream fis = new FileInputStream(new File(xlsxFileAddress));
+            XSSFWorkbook workbook = new XSSFWorkbook(fis);
+            XSSFSheet spreadsheet = workbook.getSheetAt(0);
+
+            Iterator<Row> rowIterator = spreadsheet.iterator();
+            XSSFRow row;
+
+            while (rowIterator.hasNext())
+            {
+                row = (XSSFRow) rowIterator.next();
+                Iterator<Cell> cellIterator = row.cellIterator();
+
+                while (cellIterator.hasNext())
+                {
+                    Cell cell = cellIterator.next();
+                    switch (cell.getCellType())
+                    {
+                        case Cell.CELL_TYPE_NUMERIC:
+
+                            break;
+                        case Cell.CELL_TYPE_STRING:
+
+                            break;
+                    }
+                }
+            }
+
+
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    public boolean isCCRow(XSSFRow row){
+        boolean CC = false;
+        Iterator<Cell> cellIterator = row.cellIterator();
+
+        while (cellIterator.hasNext())
+        {
+            Cell cell = cellIterator.next();
+            switch (cell.getCellType())
+            {
+                case Cell.CELL_TYPE_NUMERIC:
+
+                    break;
+                case Cell.CELL_TYPE_STRING:
+
+                    break;
+            }
+        }
+
+        return true;
 
     }
 
