@@ -75,7 +75,7 @@ public class SheetCreator {
                 CC cc = CCs.get(k);
                 String ccName = cc.getEmpName();
 
-                //System.out.println(ccName);
+                System.out.println(ccName);
 
                 if(ccName.equals(name)){
                     ccTips = cc.getTips();

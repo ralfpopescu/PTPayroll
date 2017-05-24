@@ -83,10 +83,6 @@ public class FileHandler {
         return infos;
     }
 
-
-
-
-
     public HashMap<String, EmployeeHourInfo> handleEmployeeHourInfos() {
         ArrayList<EmployeeHourInfo> infos = new ArrayList<EmployeeHourInfo>();
         HashMap<String, EmployeeHourInfo> hashInfos = new HashMap<String, EmployeeHourInfo>();
@@ -130,7 +126,7 @@ public class FileHandler {
                                 info.setOTHours((float) cell.getNumericCellValue());
                                 info.setEmpName(name);
                                 infos.add(info);
-                                hashInfos.put(name,info);
+                                hashInfos.put(name, info);
                             }
                             break;
                         case Cell.CELL_TYPE_STRING: //make sure to fix the first entry to infos
@@ -193,7 +189,7 @@ public class FileHandler {
                     switch (cell.getCellType())
                     {
                         case Cell.CELL_TYPE_NUMERIC:
-                            System.out.println(cell.getStringCellValue());
+                            //System.out.println(cell.getNumericCellValue());
                             if (cellnum == 1){
                                 cc.setEmpID((int)cell.getNumericCellValue());
                             }
@@ -201,7 +197,7 @@ public class FileHandler {
                                 name = "Patio " + cellnum;
                             }
                             if(cellnum == 5){
-                                cc.setTips((float)cell.getNumericCellValue());
+                                cc.setTips((float) cell.getNumericCellValue());
                             }
                             if(cellnum == 6){
                                 cc.setSales((float) cell.getNumericCellValue());
@@ -209,12 +205,13 @@ public class FileHandler {
 
                             break;
                         case Cell.CELL_TYPE_STRING:
-
+                            //System.out.println(cell.getStringCellValue());
                             if (cellnum == 2){
                                 name = cell.getStringCellValue();
                             }
                             if(cellnum == 3){
-                                name += ", " + cell.getStringCellValue();
+                                name += "," + cell.getStringCellValue();
+                                cc.setEmpName(name);
                             }
 
                             break;
@@ -236,28 +233,30 @@ public class FileHandler {
 
     public boolean isCCRow(XSSFRow row){
 
-        if(row.getLastCellNum() > 6) {
+        if(row.getLastCellNum() > 5) {
             return true;
+        } else {
+            return false;
         }
 
-        boolean CC = false;
-        Iterator<Cell> cellIterator = row.cellIterator();
-
-        while (cellIterator.hasNext())
-        {
-            Cell cell = cellIterator.next();
-            switch (cell.getCellType())
-            {
-                case Cell.CELL_TYPE_NUMERIC:
-
-                    break;
-                case Cell.CELL_TYPE_STRING:
-
-                    break;
-            }
-        }
-
-        return true;
+//        boolean CC = false;
+//        Iterator<Cell> cellIterator = row.cellIterator();
+//
+//        while (cellIterator.hasNext())
+//        {
+//            Cell cell = cellIterator.next();
+//            switch (cell.getCellType())
+//            {
+//                case Cell.CELL_TYPE_NUMERIC:
+//
+//                    break;
+//                case Cell.CELL_TYPE_STRING:
+//
+//                    break;
+//            }
+//        }
+//
+//        return true;
 
     }
 
@@ -303,7 +302,9 @@ public class FileHandler {
                     if(isParsable(s)){
                         currentRow.createCell(i).setCellValue(Float.parseFloat(s));
                     } else {
-                        currentRow.createCell(i).setCellValue(s);
+                        if(!s.equals(" ")) {
+                            currentRow.createCell(i).setCellValue(s);
+                        }
                     }
                 }
             }
