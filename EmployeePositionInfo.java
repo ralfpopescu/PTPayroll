@@ -8,4 +8,28 @@ public class EmployeePositionInfo {
     String name;
     String position;
     float hourlyRate;
+
+    public EmployeePositionInfo(){
+
+    }
+
+    public void setEmpName(String x){
+        name = x;
+
+    }
+    public void setEmpPosition(String x){
+        position = x;
+    }
+    public void setHourlyRate(float x){
+        hourlyRate = x;
+    }
+    public String getEmpName(){
+        return name;
+    }
+    public String getEmpPosition(){
+        return position;
+    }
+    public float getHourlyRate(){
+        return hourlyRate;
+    }
 }

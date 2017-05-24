@@ -30,7 +30,7 @@ public class FileHandler {
     }
 
     public ArrayList<EmployeePositionInfo> handleEmployeePositionInfos() {
-        ArrayList<EmployeePositionInfo> info = new ArrayList<EmployeePositionInfo>();
+        ArrayList<EmployeePositionInfo> infos = new ArrayList<EmployeePositionInfo>();
         String xlsxFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/Timesheets.xlsx";
         try {
             FileInputStream fis = new FileInputStream(new File(xlsxFileAddress));
@@ -40,23 +40,124 @@ public class FileHandler {
             Iterator<Row> rowIterator = spreadsheet.iterator();
             XSSFRow row;
 
+
             while (rowIterator.hasNext()) {
                 row = (XSSFRow) rowIterator.next();
                 Iterator<Cell> cellIterator = row.cellIterator();
+                int cellnum = 0;
+                String name = "";
+                EmployeePositionInfo info = new EmployeePositionInfo();
 
                 while (cellIterator.hasNext()) {
+                    Cell cell = cellIterator.next();
+                    switch (cell.getCellType())
+                    {
+                        case Cell.CELL_TYPE_NUMERIC:
+                            if(cellnum == 9){
+                                info.setHourlyRate((float)cell.getNumericCellValue());
+                            }
+
+                            break;
+                        case Cell.CELL_TYPE_STRING:
+                            if(cellnum == 1){
+                                name = cell.getStringCellValue();
+                            }
+                            if(cellnum == 2){
+                                name += ", " + cell.getStringCellValue();
+                            }
+                            if (cellnum == 3){
+                                info.setEmpPosition(cell.getStringCellValue());
+                            }
+
+                            break;
+                    }
+                    cellnum++;
                 }
 
             }
 
-
-            return info;
         } catch (Exception e){
             e.printStackTrace();
         }
 
-        return info;
+        return infos;
     }
+
+
+
+
+
+    public ArrayList<EmployeeHourInfo> handleEmployeeHourInfos() {
+        ArrayList<EmployeeHourInfo> infos = new ArrayList<EmployeeHourInfo>();
+        String xlsxFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/Timesheets.xlsx";
+        try {
+            FileInputStream fis = new FileInputStream(new File(xlsxFileAddress));
+            XSSFWorkbook workbook = new XSSFWorkbook(fis);
+            XSSFSheet spreadsheet = workbook.getSheetAt(0);
+
+            Iterator<Row> rowIterator = spreadsheet.iterator();
+            XSSFRow row;
+            int rowNum = 0;
+            EmployeeHourInfo info = new EmployeeHourInfo();
+            String name = "";
+
+            while (rowIterator.hasNext()) {
+
+                if(rowNum < 2){
+                    rowNum++;
+                    continue;
+                }
+
+                row = (XSSFRow) rowIterator.next();
+                Iterator<Cell> cellIterator = row.cellIterator();
+                int cellnum = 0;
+                info = new EmployeeHourInfo();
+
+                while(cellnum <= 9){
+                    Cell cell = row.getCell(cellnum, Row.RETURN_BLANK_AS_NULL);
+                    if(cell == null){
+                        cellnum++;
+                        continue;
+                    }
+                    switch (cell.getCellType())
+                    {
+                        case Cell.CELL_TYPE_NUMERIC:
+                            if(cellnum == 3){
+                                info.setRegHours((float)cell.getNumericCellValue());
+                            }
+                            if(cellnum == 4){
+                                info.setOTHours((float) cell.getNumericCellValue());
+                                info.setEmpName(name);
+                                infos.add(info);
+                            }
+                            break;
+                        case Cell.CELL_TYPE_STRING: //make sure to fix the first entry to infos
+                            if(cellnum == 1){
+                                name = cell.getStringCellValue();
+                            }
+                            if(cellnum == 2){
+                                info.setEmpPosition(cell.getStringCellValue());
+                            }
+
+                            break;
+                    }
+                    cellnum++;
+                }
+
+            }
+
+        } catch (Exception e){
+
+        }
+
+        return infos;
+
+
+    }
+
+
+
+
 
     public ArrayList<CC> handleCC(){
         String xlsxFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/CC.xlsx";
@@ -166,7 +267,7 @@ public class FileHandler {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] split = line.split("\\s+");
-                String name = split[1] + split[2];
+                String name = split[1] + " " + split[2];
                 int num = Integer.parseInt(split[0]);
                 empKeys.put(name, num);
 

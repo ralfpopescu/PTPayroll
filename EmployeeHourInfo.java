@@ -10,4 +10,20 @@ public class EmployeeHourInfo {
     float regHours;
     float OTHours;
 
+    public void setEmpName(String x){
+        name = x;
+    }
+
+    public void setEmpPosition(String x){
+        position = x;
+    }
+
+    public void setRegHours(float x){
+        regHours = x;
+    }
+
+    public void setOTHours(float x){
+        OTHours = x;
+    }
+
 }
