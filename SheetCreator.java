@@ -5,6 +5,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.HashMap;
 
 /**
@@ -47,10 +48,22 @@ public class SheetCreator {
 
         rowNum++;
 
-        ArrayList<EmployeeHourInfo> hourInfos = fileHandler.handleEmployeeHourInfos();
+        HashMap<String, EmployeeHourInfo> hourInfos = fileHandler.handleEmployeeHourInfos();
         ArrayList<EmployeePositionInfo> positionInfos = fileHandler.handleEmployeePositionInfos();
         ArrayList<CC> CCs = fileHandler.handleCC();
         HashMap<String, Integer> empKeys = fileHandler.getEmpKeys();
+        ArrayList<String> names = new ArrayList<String>();
+        names.addAll(empKeys.keySet());
+
+
+        for(int i = 0; i < empKeys.keySet().size(); i++){
+            String name = names.get(i);
+            int empKey = empKeys.get(name);
+
+            
+
+
+        }
 
 
 

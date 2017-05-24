@@ -87,8 +87,9 @@ public class FileHandler {
 
 
 
-    public ArrayList<EmployeeHourInfo> handleEmployeeHourInfos() {
+    public HashMap<String, EmployeeHourInfo> handleEmployeeHourInfos() {
         ArrayList<EmployeeHourInfo> infos = new ArrayList<EmployeeHourInfo>();
+        HashMap<String, EmployeeHourInfo> hashInfos = new HashMap<String, EmployeeHourInfo>();
         String xlsxFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/Timesheets.xlsx";
         try {
             FileInputStream fis = new FileInputStream(new File(xlsxFileAddress));
@@ -129,6 +130,7 @@ public class FileHandler {
                                 info.setOTHours((float) cell.getNumericCellValue());
                                 info.setEmpName(name);
                                 infos.add(info);
+                                hashInfos.put(name,info);
                             }
                             break;
                         case Cell.CELL_TYPE_STRING: //make sure to fix the first entry to infos
@@ -150,7 +152,7 @@ public class FileHandler {
 
         }
 
-        return infos;
+        return hashInfos;
 
 
     }
