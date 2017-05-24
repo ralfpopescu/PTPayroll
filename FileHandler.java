@@ -54,7 +54,7 @@ public class FileHandler {
                     {
                         case Cell.CELL_TYPE_NUMERIC:
                             if(cellnum == 9){
-                                info.setHourlyRate((float)cell.getNumericCellValue());
+                                info.setHourlyRate((float) cell.getNumericCellValue());
                             }
 
                             break;
@@ -193,6 +193,7 @@ public class FileHandler {
                     switch (cell.getCellType())
                     {
                         case Cell.CELL_TYPE_NUMERIC:
+                            System.out.println(cell.getStringCellValue());
                             if (cellnum == 1){
                                 cc.setEmpID((int)cell.getNumericCellValue());
                             }
@@ -208,6 +209,7 @@ public class FileHandler {
 
                             break;
                         case Cell.CELL_TYPE_STRING:
+
                             if (cellnum == 2){
                                 name = cell.getStringCellValue();
                             }
@@ -298,7 +300,11 @@ public class FileHandler {
                 for(int i=0;i<str.length;i++){
                     String s = str[i];
                     s = s.replace("\"", "");
-                    currentRow.createCell(i).setCellValue(s);
+                    if(isParsable(s)){
+                        currentRow.createCell(i).setCellValue(Float.parseFloat(s));
+                    } else {
+                        currentRow.createCell(i).setCellValue(s);
+                    }
                 }
             }
 
@@ -309,5 +315,15 @@ public class FileHandler {
         } catch (Exception ex) {
             System.out.println(ex.getMessage()+"Exception in try");
         }
+    }
+
+    public static boolean isParsable(String input){
+        boolean parsable = true;
+        try{
+            Float.parseFloat(input);
+        }catch(NumberFormatException e){
+            parsable = false;
+        }
+        return parsable;
     }
 }

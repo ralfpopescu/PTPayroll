@@ -4,6 +4,10 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashMap;
@@ -26,6 +30,8 @@ public class SheetCreator {
         //Create a blank sheet
         XSSFSheet spreadsheet = workbook.createSheet(
                 "Payroll");
+
+        String sheetTitle = "Payroll";
 
         int rowNum = 0;
 
@@ -60,17 +66,52 @@ public class SheetCreator {
             String name = names.get(i);
             int empKey = empKeys.get(name);
 
-            hourInfos.get(name);
+            XSSFRow empRow = spreadsheet.createRow(rowNum);
+            float ccTips = 0;
+            float ccSales = 0;
 
 
+            for (int k = 0;  k < CCs.size(); k++){
+                CC cc = CCs.get(k);
+                String ccName = cc.getEmpName();
 
-            for (int k = 0;  k< hourInfos.size(); k++){
+                //System.out.println(ccName);
+
+                if(ccName.equals(name)){
+                    ccTips = cc.getTips();
+                    ccSales = cc.getSales();
+                    break;
+                }
 
             }
+
+            empRow.createCell(13).setCellValue(ccTips);
+            empRow.createCell(14).setCellValue(ccSales);
+
+            rowNum++;
+
+
             for (int l = 0; l < hourInfos.size(); l++){
 
             }
 
+
+        }
+
+        try {
+            FileOutputStream out = new FileOutputStream(
+                    new File(sheetTitle + ".xlsx"));
+            try {
+                workbook.write(out);
+                out.close();
+                System.out.println(
+                        "Writesheet.xlsx written successfully");
+            } catch (IOException e){
+                System.out.println("ay");
+            }
+        } catch (FileNotFoundException e){
+            System.out.println(
+                    "shit");
 
         }
 
