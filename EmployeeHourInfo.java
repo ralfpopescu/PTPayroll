@@ -26,4 +26,20 @@ public class EmployeeHourInfo {
         OTHours = x;
     }
 
+    public String getEmpName(){
+        return name;
+    }
+
+    public String getEmpPosition(){
+        return position;
+    }
+
+    public float getRegHours(float x){
+        return regHours;
+    }
+
+    public float getOTHours(float x){
+        return OTHours;
+    }
+
 }

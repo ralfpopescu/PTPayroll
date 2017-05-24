@@ -261,7 +261,7 @@ public class FileHandler {
 
     public HashMap<String, Integer> getEmpKeys(){
         HashMap<String, Integer> empKeys = new HashMap<String, Integer>();
-        String textFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/EmployeeKeys";
+        String textFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/EmployeeKeys.txt";
         try {
             FileInputStream fstream = new FileInputStream("/Users/ralfpopescu/PTPayroll/src/sample/EmployeeKeys.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
