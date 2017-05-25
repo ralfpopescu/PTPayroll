@@ -83,14 +83,14 @@ public class FileHandler {
         return infos;
     }
 
-    public HashMap<String, EmployeeHourInfo> handleEmployeeHourInfos() {
+    public HashMap<String, ArrayList<EmployeeHourInfo>> handleEmployeeHourInfos() {
         ArrayList<EmployeeHourInfo> infos = new ArrayList<EmployeeHourInfo>();
-        HashMap<String, EmployeeHourInfo> hashInfos = new HashMap<String, EmployeeHourInfo>();
+        HashMap<String, ArrayList<EmployeeHourInfo>> hashInfos = new HashMap<String, ArrayList<EmployeeHourInfo>>();
         String xlsxFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/Timesheets.xlsx";
         try {
             FileInputStream fis = new FileInputStream(new File(xlsxFileAddress));
             XSSFWorkbook workbook = new XSSFWorkbook(fis);
-            XSSFSheet spreadsheet = workbook.getSheetAt(0);
+            XSSFSheet spreadsheet = workbook.getSheetAt(1);
 
             Iterator<Row> rowIterator = spreadsheet.iterator();
             XSSFRow row;
@@ -102,6 +102,7 @@ public class FileHandler {
 
                 if(rowNum < 2){
                     rowNum++;
+                    row = (XSSFRow) rowIterator.next();
                     continue;
                 }
 
@@ -109,6 +110,7 @@ public class FileHandler {
                 Iterator<Cell> cellIterator = row.cellIterator();
                 int cellnum = 0;
                 info = new EmployeeHourInfo();
+                ArrayList<EmployeeHourInfo> individualInfos = new ArrayList<EmployeeHourInfo>();
 
                 while(cellnum <= 9){
                     Cell cell = row.getCell(cellnum, Row.RETURN_BLANK_AS_NULL);
@@ -120,32 +122,48 @@ public class FileHandler {
                     {
                         case Cell.CELL_TYPE_NUMERIC:
                             if(cellnum == 3){
-                                info.setRegHours((float)cell.getNumericCellValue());
+                                info.setRegHours((float) cell.getNumericCellValue());
                             }
                             if(cellnum == 4){
                                 info.setOTHours((float) cell.getNumericCellValue());
-                                info.setEmpName(name);
-                                infos.add(info);
-                                hashInfos.put(name, info);
                             }
                             break;
+
                         case Cell.CELL_TYPE_STRING: //make sure to fix the first entry to infos
+                            //System.out.println(cell.getStringCellValue());
                             if(cellnum == 1){
+                                infos.add(info);
+                                individualInfos = new ArrayList<EmployeeHourInfo>();
+
                                 name = cell.getStringCellValue();
+                                String[] split = name.split("\\s+");
+                                if(split.length > 1) {
+                                    name = split[1] + ", " + split[0];
+                                } else {
+                                    //name = split[0];
+                                    name = split[0];
+                                }
                             }
                             if(cellnum == 2){
                                 info.setEmpPosition(cell.getStringCellValue());
+                                info.setEmpName(name);
                             }
 
                             break;
                     }
                     cellnum++;
+
+                }
+
+                if(info.getEmpName() != null) {
+                    individualInfos.add(info);
+                    hashInfos.put(name, individualInfos);
                 }
 
             }
 
         } catch (Exception e){
-
+            e.printStackTrace();
         }
 
         return hashInfos;

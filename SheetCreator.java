@@ -54,7 +54,7 @@ public class SheetCreator {
 
         rowNum++;
 
-        HashMap<String, EmployeeHourInfo> hourInfos = fileHandler.handleEmployeeHourInfos();
+        HashMap<String, ArrayList<EmployeeHourInfo>> hourInfos = fileHandler.handleEmployeeHourInfos();
         ArrayList<EmployeePositionInfo> positionInfos = fileHandler.handleEmployeePositionInfos();
         ArrayList<CC> CCs = fileHandler.handleCC();
         HashMap<String, Integer> empKeys = fileHandler.getEmpKeys();
@@ -70,26 +70,32 @@ public class SheetCreator {
             float ccTips = 0;
             float ccSales = 0;
 
+            ArrayList<EmployeeHourInfo> empHourList = hourInfos.get(name);
+            if(empHourList != null) {
+                System.out.println(empHourList.get(0).getEmpName());
+            } else {
+                //System.out.println("No Entry for " + name);
+            }
+
+
 
             for (int k = 0;  k < CCs.size(); k++){
                 CC cc = CCs.get(k);
                 String ccName = cc.getEmpName();
 
-                System.out.println(ccName);
+                //System.out.println(ccName);
 
                 if(ccName.equals(name)){
                     ccTips = cc.getTips();
                     ccSales = cc.getSales();
                     break;
                 }
-
             }
 
             empRow.createCell(13).setCellValue(ccTips);
             empRow.createCell(14).setCellValue(ccSales);
 
             rowNum++;
-
 
             for (int l = 0; l < hourInfos.size(); l++){
 
