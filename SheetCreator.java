@@ -72,9 +72,24 @@ public class SheetCreator {
 
             ArrayList<EmployeeHourInfo> empHourList = hourInfos.get(name);
             if(empHourList != null) {
-                System.out.println(empHourList.get(0).getEmpName());
+                System.out.println(empHourList.get(0).getEmpName() + " " + empHourList.size());
+                for (int j = 0; j < empHourList.size(); j++){
+                    if(j == 0) {
+                        empRow.createCell(0).setCellValue("GA2295");
+                        empRow.createCell(1).setCellValue("Bi-Weekly");
+                        empRow.createCell(4).setCellValue(name);
+                        empRow.createCell(6).setCellValue(empHourList.get(0).getRegHours());
+                        empRow.createCell(7).setCellValue(empHourList.get(0).getOTHours());
+                    } else {
+                        rowNum++;
+                        empRow = spreadsheet.createRow(rowNum);
+                        empRow.createCell(6).setCellValue(empHourList.get(j).getRegHours());
+                        empRow.createCell(7).setCellValue(empHourList.get(j).getOTHours());
+                    }
+
+                }
             } else {
-                //System.out.println("No Entry for " + name);
+                empRow.createCell(0).setCellValue("Missing info or typo for " + name);
             }
 
 
@@ -102,6 +117,10 @@ public class SheetCreator {
             }
 
 
+        }
+
+        for (int i=0; i< spreadsheet.getPhysicalNumberOfRows(); i++){
+            spreadsheet.autoSizeColumn(i);
         }
 
         try {

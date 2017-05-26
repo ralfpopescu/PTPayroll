@@ -97,6 +97,7 @@ public class FileHandler {
             int rowNum = 0;
             EmployeeHourInfo info = new EmployeeHourInfo();
             String name = "";
+            ArrayList<EmployeeHourInfo> individualInfos = new ArrayList<EmployeeHourInfo>();
 
             while (rowIterator.hasNext()) {
 
@@ -110,7 +111,7 @@ public class FileHandler {
                 Iterator<Cell> cellIterator = row.cellIterator();
                 int cellnum = 0;
                 info = new EmployeeHourInfo();
-                ArrayList<EmployeeHourInfo> individualInfos = new ArrayList<EmployeeHourInfo>();
+
 
                 while(cellnum <= 9){
                     Cell cell = row.getCell(cellnum, Row.RETURN_BLANK_AS_NULL);
@@ -157,6 +158,7 @@ public class FileHandler {
 
                 if(info.getEmpName() != null) {
                     individualInfos.add(info);
+                    //System.out.println(individualInfos.size());
                     hashInfos.put(name, individualInfos);
                 }
 

@@ -34,11 +34,11 @@ public class EmployeeHourInfo {
         return position;
     }
 
-    public float getRegHours(float x){
+    public float getRegHours(){
         return regHours;
     }
 
-    public float getOTHours(float x){
+    public float getOTHours(){
         return OTHours;
     }
 
