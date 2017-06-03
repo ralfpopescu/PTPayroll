@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import java.util.ArrayList;
 import org.apache.poi.ss.usermodel.CellCopyPolicy;
 import java.io.File;
@@ -31,6 +32,7 @@ public class FileHandler {
 
     public ArrayList<EmployeePositionInfo> handleEmployeePositionInfos() {
         ArrayList<EmployeePositionInfo> infos = new ArrayList<EmployeePositionInfo>();
+        HashMap<String, ArrayList<EmployeePositionInfo>> hashInfos = new HashMap<String, ArrayList<EmployeePositionInfo>>();
         String xlsxFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/Timesheets.xlsx";
         try {
             FileInputStream fis = new FileInputStream(new File(xlsxFileAddress));
@@ -48,13 +50,24 @@ public class FileHandler {
                 String name = "";
                 EmployeePositionInfo info = new EmployeePositionInfo();
 
-                while (cellIterator.hasNext()) {
-                    Cell cell = cellIterator.next();
+                while (cellnum <= 9) {
+                    Cell cell = row.getCell(cellnum, Row.RETURN_BLANK_AS_NULL);
+                    if(cell == null){
+                        cellnum++;
+                        continue;
+                    }
                     switch (cell.getCellType())
                     {
                         case Cell.CELL_TYPE_NUMERIC:
                             if(cellnum == 9){
-                                info.setHourlyRate((float) cell.getNumericCellValue());
+                                String dollarAmount = new DataFormatter().formatCellValue(cell);
+                                dollarAmount = dollarAmount.replace("$","");
+                                float dollarNum = 0;
+                                if(isParsable(dollarAmount)){
+                                    dollarNum = Float.parseFloat(dollarAmount);
+                                }
+                                info.setHourlyRate(dollarNum);
+                                System.out.println(dollarNum);
                             }
 
                             break;

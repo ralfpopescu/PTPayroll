@@ -72,7 +72,6 @@ public class SheetCreator {
 
             ArrayList<EmployeeHourInfo> empHourList = hourInfos.get(name);
             if(empHourList != null) {
-                System.out.println(empHourList.get(0).getEmpName() + " " + empHourList.size());
                 for (int j = 0; j < empHourList.size(); j++){
                     if(j == 0) {
                         empRow.createCell(0).setCellValue("GA2295");
