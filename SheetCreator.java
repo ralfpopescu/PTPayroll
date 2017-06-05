@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.HashMap;
+import java.util.Collections;
 
 /**
  * Created by ralfpopescu on 5/23/17.
@@ -57,6 +58,7 @@ public class SheetCreator {
         HashMap<String,String> divisionCoder = new HashMap<String,String>();
 
         divisionCoder.put("Manager", "02");
+        divisionCoder.put("MOD", "02");
         divisionCoder.put("Event Sales", "03");
         divisionCoder.put("Kitchen", "06");
         divisionCoder.put("Host", "07");
@@ -68,6 +70,7 @@ public class SheetCreator {
         divisionCoder.put("Dishwasher","09");
         divisionCoder.put("Manager Salary","11");
         divisionCoder.put("Bartender","12");
+        divisionCoder.put("Service","12");
         divisionCoder.put("Maintenance","13");
         divisionCoder.put("Banquet Server","18");
         divisionCoder.put("Event Server","18");
@@ -89,6 +92,7 @@ public class SheetCreator {
         ArrayList<String> names = new ArrayList<String>();
         HashSet<String> bartenders = getBartenders(positionInfos);
         names.addAll(empKeys.keySet());
+        Collections.sort(names);
 
 
         float barTotal = 0;
@@ -143,11 +147,13 @@ public class SheetCreator {
                         empRow.createCell(4).setCellValue(name);
                         if(isSubMin(position)){
                             empRow.createCell(11).setCellValue(empHourList.get(0).getRegHours());
+                            empRow.createCell(12).setCellValue(empHourList.get(0).getOTHours());
                         } else {
                             empRow.createCell(6).setCellValue(empHourList.get(0).getRegHours());
+                            empRow.createCell(8).setCellValue(empHourList.get(0).getOTHours());
                         }
-                        empRow.createCell(8).setCellValue(empHourList.get(0).getOTHours());
-                        empRow.createCell(7).setCellValue(epi.getHourlyRate());
+
+                        empRow.createCell(7).setCellValue(Math.floor(epi.getHourlyRate() * 100) / 100);
 
                         if(CCHashmap.get(name) != null) {
                             ccTips = CCHashmap.get(name).getTips();
@@ -157,8 +163,8 @@ public class SheetCreator {
                             ccSales = 0;
                         }
 
-                        empRow.createCell(13).setCellValue(ccTips);
-                        empRow.createCell(14).setCellValue(ccSales);
+                        empRow.createCell(13).setCellValue(Math.round(ccTips*100.0)/100.0);
+                        empRow.createCell(14).setCellValue(Math.round(ccSales*100.0)/100.0);
 
                     } else { //if employee has multiple positions
                         rowNum++;
@@ -188,10 +194,17 @@ public class SheetCreator {
                             empRow2.createCell(5).setCellValue("Potential typo/missing info: " + position);
                         }
 
-                        empRow2.createCell(6).setCellValue(empHourList.get(j).getRegHours());
-                        empRow2.createCell(7).setCellValue(empHourList.get(j).getOTHours());
-                        empRow2.createCell(13).setCellValue(ccTips);
-                        empRow2.createCell(14).setCellValue(ccSales);
+                        if(isSubMin(position)){
+                            empRow2.createCell(11).setCellValue(ehi.getRegHours());
+                            empRow2.createCell(12).setCellValue(ehi.getOTHours());
+                        } else {
+                            empRow2.createCell(6).setCellValue(ehi.getRegHours());
+                            empRow2.createCell(8).setCellValue(ehi.getOTHours());
+                        }
+
+                        empRow2.createCell(7).setCellValue(Math.floor(epi.getHourlyRate() * 100) / 100);
+                        empRow2.createCell(13).setCellValue(Math.round(ccTips*100.0)/100.0);
+                        empRow2.createCell(14).setCellValue(Math.round(ccSales*100.0)/100.0);
                     }
 
                 }

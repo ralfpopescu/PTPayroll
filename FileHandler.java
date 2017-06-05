@@ -449,34 +449,33 @@ public class FileHandler {
         }
     }
 
-    public void alphabetizeEmployees(){
-        try {
-            FileInputStream fstream = new FileInputStream("/Users/ralfpopescu/PTPayroll/src/sample/EmployeeKeys3.txt");
-            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-            ArrayList<String> names = new ArrayList<String>();
-
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] split = line.split("\\s");
-                String name = split[1] + split[2] + split[0];
-                names.add(name);
-            }
-            Collections.sort(names);
-            try{
-                PrintWriter writer = new PrintWriter("the-file-name.txt", "UTF-8");
-                for(String name: names){
-                    writer.println(name);
-                }
-            } catch (IOException e) {
-                // do something
-            }
-
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-
-    }
+//    public void alphabetizeEmployees(){
+//        try {
+//            FileInputStream fstream = new FileInputStream("/Users/ralfpopescu/PTPayroll/src/sample/EmployeeKeys3.txt");
+//            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+//            ArrayList<String> names = new ArrayList<String>();
+//
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                String[] split = line.split("\\s");
+//                String name = split[1] + split[2] + split[0];
+//                names.add(name);
+//            }
+//            Collections.sort(names);
+//            try{
+//                PrintWriter writer = new PrintWriter("the-file-name.txt", "UTF-8");
+//                for(String name: names){
+//                    System.out.println(name);
+//                    writer.println(name);
+//                }
+//            } catch (IOException e) {
+//                // do something
+//            }
+//
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
 
 
     public static boolean isParsable(String input){

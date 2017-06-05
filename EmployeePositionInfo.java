@@ -7,7 +7,7 @@ public class EmployeePositionInfo {
 
     String name;
     String position;
-    float hourlyRate;
+    float hourlyRate = 0;
 
     public EmployeePositionInfo(){
 
