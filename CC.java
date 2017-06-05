@@ -9,6 +9,7 @@ public class CC {
     float sales;
     float tips;
     int empID;
+    boolean bar = false;
 
     public CC (){
 
@@ -37,6 +38,10 @@ public class CC {
         return empID;
     }
 
+    public boolean isBar(){
+        return bar;
+    }
+
     public void setEmpName(String x){
         name = x;
     }
@@ -51,6 +56,10 @@ public class CC {
 
     public void setEmpID(int x){
         empID = x;
+    }
+
+    public void setIsBar(boolean x){
+        bar = x;
     }
 
 }

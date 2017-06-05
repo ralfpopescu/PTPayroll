@@ -17,6 +17,7 @@ public class Main extends Application {
 
         FileHandler fileHandler = new FileHandler();
         fileHandler.csvToXLSX();
+        fileHandler.alphabetizeEmployees();
 
         SheetCreator sheetCreator = new SheetCreator();
         sheetCreator.makeSheet();

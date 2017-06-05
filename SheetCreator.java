@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.HashMap;
 
@@ -63,6 +64,7 @@ public class SheetCreator {
         divisionCoder.put("Food Runner","09");
         divisionCoder.put("Busser","09");
         divisionCoder.put("Barback","09");
+        divisionCoder.put("Inventory","09");
         divisionCoder.put("Dishwasher","09");
         divisionCoder.put("Manager Salary","11");
         divisionCoder.put("Bartender","12");
@@ -82,9 +84,23 @@ public class SheetCreator {
         HashMap<String, ArrayList<EmployeeHourInfo>> hourInfos = fileHandler.handleEmployeeHourInfos();
         HashMap<String, ArrayList<EmployeePositionInfo>> positionInfos = fileHandler.handleEmployeePositionInfos();
         ArrayList<CC> CCs = fileHandler.handleCC();
+        HashMap<String, CC> CCHashmap = fileHandler.hashCC();
         HashMap<String, Integer> empKeys = fileHandler.getEmpKeys();
         ArrayList<String> names = new ArrayList<String>();
+        HashSet<String> bartenders = getBartenders(positionInfos);
         names.addAll(empKeys.keySet());
+
+
+        float barTotal = 0;
+        for (int k = 0;  k < CCs.size(); k++){
+            CC cc = CCs.get(k);
+            String ccName = cc.getEmpName();
+
+            if(cc.isBar()){
+                barTotal += cc.getTips();
+            }
+
+        }
 
 
         for(int i = 0; i < empKeys.keySet().size(); i++){
@@ -106,11 +122,11 @@ public class SheetCreator {
                         EmployeePositionInfo epi = new EmployeePositionInfo();
 
                         if(posInfos != null){
-
                             for(EmployeePositionInfo x: posInfos){
-                                if(x.getEmpPosition().equals(position)){
-                                    epi = x;
-                                    System.out.println(epi.getHourlyRate());
+                                if(x.getEmpPosition() != null) {
+                                    if (x.getEmpPosition().equals(position)) {
+                                        epi = x;
+                                    }
                                 }
                             }
                         }
@@ -132,32 +148,61 @@ public class SheetCreator {
                         }
                         empRow.createCell(8).setCellValue(empHourList.get(0).getOTHours());
                         empRow.createCell(7).setCellValue(epi.getHourlyRate());
-                    } else {
+
+                        if(CCHashmap.get(name) != null) {
+                            ccTips = CCHashmap.get(name).getTips();
+                            ccSales = CCHashmap.get(name).getSales();
+                        } else {
+                            ccTips = 0;
+                            ccSales = 0;
+                        }
+
+                        empRow.createCell(13).setCellValue(ccTips);
+                        empRow.createCell(14).setCellValue(ccSales);
+
+                    } else { //if employee has multiple positions
                         rowNum++;
-                        empRow = spreadsheet.createRow(rowNum);
-                        empRow.createCell(6).setCellValue(empHourList.get(j).getRegHours());
-                        empRow.createCell(7).setCellValue(empHourList.get(j).getOTHours());
+                        XSSFRow empRow2 = spreadsheet.createRow(rowNum);
+
+                        EmployeeHourInfo ehi = empHourList.get(j);
+                        String position = ehi.getEmpPosition();
+                        EmployeePositionInfo epi = new EmployeePositionInfo();
+
+                        if(posInfos != null){
+                            for(EmployeePositionInfo x: posInfos){
+                                if(x.getEmpPosition().equals(position)){
+                                    epi = x;
+                                }
+                            }
+                        }
+
+                        empRow2.createCell(0).setCellValue("GA2295");
+                        empRow2.createCell(1).setCellValue("Bi-Weekly");
+                        empRow2.createCell(3).setCellValue(empKey);
+                        String divisionCode = divisionCoder.get(position);
+                        System.out.println(divisionCode);
+
+                        if(divisionCode != null) {
+                            empRow2.createCell(5).setCellValue(divisionCode);
+                        } else {
+                            empRow2.createCell(5).setCellValue("Potential typo/missing info: " + position);
+                        }
+
+                        empRow2.createCell(6).setCellValue(empHourList.get(j).getRegHours());
+                        empRow2.createCell(7).setCellValue(empHourList.get(j).getOTHours());
+                        empRow2.createCell(13).setCellValue(ccTips);
+                        empRow2.createCell(14).setCellValue(ccSales);
                     }
 
                 }
             } else {
+                //System.out.println(":" + name);
                 empRow.createCell(0).setCellValue("Missing info or typo for " + name);
             }
 
 
-            for (int k = 0;  k < CCs.size(); k++){
-                CC cc = CCs.get(k);
-                String ccName = cc.getEmpName();
-
-                if(ccName.equals(name)){
-                    ccTips = cc.getTips();
-                    ccSales = cc.getSales();
-                    break;
-                }
-            }
-
-            empRow.createCell(13).setCellValue(ccTips);
-            empRow.createCell(14).setCellValue(ccSales);
+//            empRow.createCell(13).setCellValue(ccTips);
+//            empRow.createCell(14).setCellValue(ccSales);
 
             rowNum++;
 
@@ -189,5 +234,24 @@ public class SheetCreator {
 
     private boolean isSubMin(String position){
         return position.equals("Server") || position.equals("Bartender");
+    }
+
+    private HashSet<String> getBartenders(HashMap<String, ArrayList<EmployeePositionInfo>> posInfo){
+        HashSet<String> bartenders = new HashSet<String>();
+        for (String name : posInfo.keySet()) {
+            ArrayList<EmployeePositionInfo> infos = posInfo.get(name);
+            for(EmployeePositionInfo info: infos) {
+                if(info.getEmpPosition() != null) {
+                    if (info.getEmpPosition().equals("Bartender")) {
+                        bartenders.add(name);
+                    }
+                }
+            }
+        }
+        return bartenders;
+    }
+
+    private float calculateBarTipShare(float total, String name, ArrayList<String> bartenders){
+        return 0;
     }
 }
