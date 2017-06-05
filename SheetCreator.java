@@ -52,10 +52,35 @@ public class SheetCreator {
         first.createCell(13).setCellValue("E_Charge Tips_Dollars");
         first.createCell(14).setCellValue("E_Tipped Sales_Dollars");
 
+
+        HashMap<String,String> divisionCoder = new HashMap<String,String>();
+
+        divisionCoder.put("Manager", "02");
+        divisionCoder.put("Event Sales", "03");
+        divisionCoder.put("Kitchen", "06");
+        divisionCoder.put("Host", "07");
+        divisionCoder.put("Server", "08");
+        divisionCoder.put("Food Runner","09");
+        divisionCoder.put("Busser","09");
+        divisionCoder.put("Barback","09");
+        divisionCoder.put("Dishwasher","09");
+        divisionCoder.put("Manager Salary","11");
+        divisionCoder.put("Bartender","12");
+        divisionCoder.put("Maintenance","13");
+        divisionCoder.put("Banquet Server","18");
+        divisionCoder.put("Event Server","18");
+        divisionCoder.put("Banquet Bartender","20");
+        divisionCoder.put("Banquet Dishwasher","21");
+        divisionCoder.put("Sushi","24");
+        divisionCoder.put("Banquet Cook","24");
+        divisionCoder.put("Ice Rink","26");
+        divisionCoder.put("Basecamp","27");
+        divisionCoder.put("Parking","28");
+
         rowNum++;
 
         HashMap<String, ArrayList<EmployeeHourInfo>> hourInfos = fileHandler.handleEmployeeHourInfos();
-        ArrayList<EmployeePositionInfo> positionInfos = fileHandler.handleEmployeePositionInfos();
+        HashMap<String, ArrayList<EmployeePositionInfo>> positionInfos = fileHandler.handleEmployeePositionInfos();
         ArrayList<CC> CCs = fileHandler.handleCC();
         HashMap<String, Integer> empKeys = fileHandler.getEmpKeys();
         ArrayList<String> names = new ArrayList<String>();
@@ -71,14 +96,42 @@ public class SheetCreator {
             float ccSales = 0;
 
             ArrayList<EmployeeHourInfo> empHourList = hourInfos.get(name);
+            ArrayList<EmployeePositionInfo> posInfos = positionInfos.get(name);
+
             if(empHourList != null) {
                 for (int j = 0; j < empHourList.size(); j++){
                     if(j == 0) {
+                        EmployeeHourInfo ehi = empHourList.get(0);
+                        String position = ehi.getEmpPosition();
+                        EmployeePositionInfo epi = new EmployeePositionInfo();
+
+                        if(posInfos != null){
+
+                            for(EmployeePositionInfo x: posInfos){
+                                if(x.getEmpPosition().equals(position)){
+                                    epi = x;
+                                    System.out.println(epi.getHourlyRate());
+                                }
+                            }
+                        }
+
                         empRow.createCell(0).setCellValue("GA2295");
                         empRow.createCell(1).setCellValue("Bi-Weekly");
+                        String divisionCode = divisionCoder.get(position);
+                        if(divisionCode != null) {
+                            empRow.createCell(2).setCellValue(divisionCode);
+                        } else {
+                            empRow.createCell(2).setCellValue("Potential typo/missing info: " + position);
+                        }
+                        empRow.createCell(3).setCellValue(empKey);
                         empRow.createCell(4).setCellValue(name);
-                        empRow.createCell(6).setCellValue(empHourList.get(0).getRegHours());
-                        empRow.createCell(7).setCellValue(empHourList.get(0).getOTHours());
+                        if(isSubMin(position)){
+                            empRow.createCell(11).setCellValue(empHourList.get(0).getRegHours());
+                        } else {
+                            empRow.createCell(6).setCellValue(empHourList.get(0).getRegHours());
+                        }
+                        empRow.createCell(8).setCellValue(empHourList.get(0).getOTHours());
+                        empRow.createCell(7).setCellValue(epi.getHourlyRate());
                     } else {
                         rowNum++;
                         empRow = spreadsheet.createRow(rowNum);
@@ -92,12 +145,9 @@ public class SheetCreator {
             }
 
 
-
             for (int k = 0;  k < CCs.size(); k++){
                 CC cc = CCs.get(k);
                 String ccName = cc.getEmpName();
-
-                //System.out.println(ccName);
 
                 if(ccName.equals(name)){
                     ccTips = cc.getTips();
@@ -110,10 +160,6 @@ public class SheetCreator {
             empRow.createCell(14).setCellValue(ccSales);
 
             rowNum++;
-
-            for (int l = 0; l < hourInfos.size(); l++){
-
-            }
 
 
         }
@@ -139,7 +185,9 @@ public class SheetCreator {
 
         }
 
+    }
 
-
+    private boolean isSubMin(String position){
+        return position.equals("Server") || position.equals("Bartender");
     }
 }

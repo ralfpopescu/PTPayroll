@@ -30,7 +30,7 @@ public class FileHandler {
 
     }
 
-    public ArrayList<EmployeePositionInfo> handleEmployeePositionInfos() {
+    public HashMap<String, ArrayList<EmployeePositionInfo>> handleEmployeePositionInfos() {
         ArrayList<EmployeePositionInfo> infos = new ArrayList<EmployeePositionInfo>();
         HashMap<String, ArrayList<EmployeePositionInfo>> hashInfos = new HashMap<String, ArrayList<EmployeePositionInfo>>();
         String xlsxFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/Timesheets.xlsx";
@@ -67,7 +67,16 @@ public class FileHandler {
                                     dollarNum = Float.parseFloat(dollarAmount);
                                 }
                                 info.setHourlyRate(dollarNum);
-                                System.out.println(dollarNum);
+
+                                ArrayList<EmployeePositionInfo> val = hashInfos.get(name);
+                                if(val == null){
+                                    ArrayList<EmployeePositionInfo> newInfo = new ArrayList<EmployeePositionInfo>();
+                                    newInfo.add(info);
+                                    hashInfos.put(name, newInfo);
+                                } else {
+                                    val.add(info);
+                                    hashInfos.put(name, val);
+                                }
                             }
 
                             break;
@@ -76,7 +85,7 @@ public class FileHandler {
                                 name = cell.getStringCellValue();
                             }
                             if(cellnum == 2){
-                                name += ", " + cell.getStringCellValue();
+                                name = cell.getStringCellValue() + ", " + name;
                             }
                             if (cellnum == 3){
                                 info.setEmpPosition(cell.getStringCellValue());
@@ -93,7 +102,7 @@ public class FileHandler {
             e.printStackTrace();
         }
 
-        return infos;
+        return hashInfos;
     }
 
     public HashMap<String, ArrayList<EmployeeHourInfo>> handleEmployeeHourInfos() {
