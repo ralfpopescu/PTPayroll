@@ -63,6 +63,7 @@ public class SheetCreator {
         divisionCoder.put("Kitchen", "06");
         divisionCoder.put("Host", "07");
         divisionCoder.put("Server", "08");
+        divisionCoder.put("Training Server", "08");
         divisionCoder.put("Food Runner","09");
         divisionCoder.put("Busser","09");
         divisionCoder.put("Barback","09");
@@ -103,8 +104,9 @@ public class SheetCreator {
             if(cc.isBar()){
                 barTotal += cc.getTips();
             }
-
         }
+
+        HashMap<String, Float> barTipsByName = calculateBarTipShare(barTotal, bartenders, hourInfos);
 
 
         for(int i = 0; i < empKeys.keySet().size(); i++){
@@ -163,6 +165,11 @@ public class SheetCreator {
                             ccSales = 0;
                         }
 
+                        if(position.equals("Bartender")){
+                            ccTips = barTipsByName.get(name);
+                            ccSales = 0;
+                        }
+
                         empRow.createCell(13).setCellValue(Math.round(ccTips*100.0)/100.0);
                         empRow.createCell(14).setCellValue(Math.round(ccSales*100.0)/100.0);
 
@@ -182,11 +189,23 @@ public class SheetCreator {
                             }
                         }
 
+                        if(CCHashmap.get(name) != null) {
+                            ccTips = CCHashmap.get(name).getTips();
+                            ccSales = CCHashmap.get(name).getSales();
+                        } else {
+                            ccTips = 0;
+                            ccSales = 0;
+                        }
+
+                        if(position.equals("Bartender")){
+                            ccTips = barTipsByName.get(name);
+                            ccSales = 0;
+                        }
+
                         empRow2.createCell(0).setCellValue("GA2295");
                         empRow2.createCell(1).setCellValue("Bi-Weekly");
                         empRow2.createCell(3).setCellValue(empKey);
                         String divisionCode = divisionCoder.get(position);
-                        System.out.println(divisionCode);
 
                         if(divisionCode != null) {
                             empRow2.createCell(5).setCellValue(divisionCode);
@@ -264,7 +283,28 @@ public class SheetCreator {
         return bartenders;
     }
 
-    private float calculateBarTipShare(float total, String name, ArrayList<String> bartenders){
-        return 0;
+    private HashMap<String, Float> calculateBarTipShare(float total, HashSet<String> bartenders,
+                                       HashMap<String, ArrayList<EmployeeHourInfo>> hourInfos){
+
+        float totalTime = 0;
+        HashMap<String, Float> barTipsByName = new HashMap<String, Float>();
+        HashMap<String, Float> bartendingHoursByName = new HashMap<String, Float>();
+
+        for(String bt: bartenders){
+            ArrayList<EmployeeHourInfo> hi = hourInfos.get(bt);
+
+            for(EmployeeHourInfo ehi: hi){
+                if(ehi.getEmpPosition().equals("Bartender")){
+                    bartendingHoursByName.put(ehi.getEmpName(),(ehi.getRegHours() + ehi.getOTHours()));
+                    totalTime += ehi.getRegHours() + ehi.getOTHours();
+                }
+            }
+        }
+        for(String bt: bartenders){
+            float ratio = bartendingHoursByName.get(bt)/totalTime;
+            barTipsByName.put(bt, total*ratio);
+
+        }
+        return barTipsByName;
     }
 }
