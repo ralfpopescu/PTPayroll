@@ -5,22 +5,36 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.layout.Pane;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+
+        State state = new State();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("PayrollPage.fxml"));
+        Parent root = loader.load();
+        primaryStage.setTitle("Park Tavern Payroll");
+        Scene payroll = new Scene(root, 700, 600);
+        primaryStage.setScene(payroll);
         primaryStage.show();
+
+        SceneController sceneController = new SceneController(primaryStage, state);
+
+        PayrollController payrollController = loader.getController();
+        payrollController.giveSceneController(sceneController);
+        payrollController.setState(state);
+        sceneController.setPayrollController(payrollController, payroll);
 
         FileHandler fileHandler = new FileHandler();
         fileHandler.csvToXLSX();
         //fileHandler.alphabetizeEmployees();
 
-        SheetCreator sheetCreator = new SheetCreator();
-        sheetCreator.makeSheet();
+//        SheetCreator sheetCreator = new SheetCreator();
+//        sheetCreator.makeSheet();
+
+
     }
 
 
