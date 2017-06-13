@@ -12,7 +12,7 @@ public class State {
     SheetCreator sheetCreator;
 
     public State(){
-        sheetCreator = new SheetCreator();
+        sheetCreator = new SheetCreator(this);
     }
 
     public void setAlohaFile(File f){
@@ -20,6 +20,12 @@ public class State {
     }
     public void setWhenIWorkFile(File f){
         WhenIWorkFile = f;
+    }
+    public File getAlohaFile(){
+        return AlohaFile;
+    }
+    public File getWhenIWorkFile(){
+        return WhenIWorkFile;
     }
 
     public SheetCreator getSheetCreator(){

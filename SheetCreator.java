@@ -22,9 +22,11 @@ import java.util.Collections;
 public class SheetCreator {
 
     FileHandler fileHandler;
+    State state;
 
-    public SheetCreator(){
+    public SheetCreator(State s){
         fileHandler = new FileHandler();
+        state = s;
     }
 
     public void makeSheet(){
@@ -85,10 +87,10 @@ public class SheetCreator {
 
         rowNum++;
 
-        HashMap<String, ArrayList<EmployeeHourInfo>> hourInfos = fileHandler.handleEmployeeHourInfos();
-        HashMap<String, ArrayList<EmployeePositionInfo>> positionInfos = fileHandler.handleEmployeePositionInfos();
+        HashMap<String, ArrayList<EmployeeHourInfo>> hourInfos = fileHandler.handleEmployeeHourInfos(state.getWhenIWorkFile());
+        HashMap<String, ArrayList<EmployeePositionInfo>> positionInfos = fileHandler.handleEmployeePositionInfos(state.getWhenIWorkFile());
         ArrayList<CC> CCs = fileHandler.handleCC();
-        HashMap<String, CC> CCHashmap = fileHandler.hashCC();
+        HashMap<String, CC> CCHashmap = fileHandler.hashCC(state.getAlohaFile());
         HashMap<String, Integer> empKeys = fileHandler.getEmpKeys();
         ArrayList<String> names = new ArrayList<String>();
         HashSet<String> bartenders = getBartenders(positionInfos);

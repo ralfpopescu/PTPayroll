@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import java.io.File;
+import javafx.scene.control.TextField;
+import javafx.fxml.FXML;
 
 public class PayrollController {
 
@@ -14,6 +16,8 @@ public class PayrollController {
     SheetCreator sheetCreator;
     int test = 0;
     State state;
+    @FXML private TextField AlohaText;
+    @FXML private TextField WhenIWorkText;
 
     public PayrollController(){
 
@@ -33,6 +37,7 @@ public class PayrollController {
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(sceneController.getStage());
         state.setAlohaFile(file);
+        AlohaText.setText(file.getName());
 
     }
     public void HandleUploadWhenIWork(){
@@ -40,6 +45,7 @@ public class PayrollController {
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(sceneController.getStage());
         state.setWhenIWorkFile(file);
+        WhenIWorkText.setText(file.getName());
 
     }
     public void HandleAddEditEmployees(){

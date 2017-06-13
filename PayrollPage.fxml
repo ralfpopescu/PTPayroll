@@ -48,6 +48,20 @@
          <center>
             <Button fx:id="MakePayroll" mnemonicParsing="false" onAction="#HandleMakePayroll" text="MAKE PAYROLL" BorderPane.alignment="CENTER" />
          </center>
+         <left>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TextField fx:id="WhenIWorkText" layoutX="17.0" layoutY="16.0" />
+               </children>
+            </AnchorPane>
+         </left>
+         <right>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TextField fx:id="AlohaText" layoutX="-14.0" layoutY="16.0" prefHeight="27.0" prefWidth="175.0" />
+               </children>
+            </AnchorPane>
+         </right>
       </BorderPane>
    </bottom>
    <top>
