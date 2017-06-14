@@ -8,7 +8,7 @@
   <items>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
          <children>
-            <ListView prefHeight="320.0" prefWidth="598.0" />
+            <ListView fx:id="EmployeeList" prefHeight="320.0" prefWidth="598.0" />
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="104.0" prefWidth="598.0">
          <children>
@@ -16,6 +16,7 @@
             <Button fx:id="AddEmployeeButton" layoutX="419.0" layoutY="14.0" mnemonicParsing="false" onAction="#HandleAddEmployee" text="Add Employee" />
             <TextField fx:id="KeyText" layoutX="308.0" layoutY="14.0" prefHeight="27.0" prefWidth="75.0" promptText="Key:" />
             <Button fx:id="BackButton" layoutX="252.0" layoutY="64.0" mnemonicParsing="false" onAction="#HandleBackButton" text="Back" />
+            <Button fx:id="DeleteEmployee" layoutX="419.0" layoutY="51.0" mnemonicParsing="false" onAction="#HandleDeleteEmployee" text="Delete Selected" />
          </children></AnchorPane>
   </items>
 </SplitPane>

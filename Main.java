@@ -12,7 +12,12 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
+        FileHandler fileHandler = new FileHandler();
+        fileHandler.csvToXLSX();
+
         State state = new State();
+        state.setEmpKeys(fileHandler.getEmpKeys());
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("PayrollPage.fxml"));
         Parent root = loader.load();
         primaryStage.setTitle("Park Tavern Payroll");
@@ -27,8 +32,7 @@ public class Main extends Application {
         payrollController.setState(state);
         sceneController.setPayrollController(payrollController, payroll);
 
-        FileHandler fileHandler = new FileHandler();
-        fileHandler.csvToXLSX();
+
         //fileHandler.alphabetizeEmployees();
 
 //        SheetCreator sheetCreator = new SheetCreator();

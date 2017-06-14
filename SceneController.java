@@ -48,6 +48,7 @@ public class SceneController {
             EmployeeEditController controller = loader.getController();
             controller.giveSceneController(this);
             controller.giveState(state);
+            controller.populateList();
 
             primaryStage.getScene().setRoot(root);
         } catch (Exception e){
