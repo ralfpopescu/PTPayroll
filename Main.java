@@ -35,8 +35,6 @@ public class Main extends Application {
 
         //fileHandler.alphabetizeEmployees();
 
-//        SheetCreator sheetCreator = new SheetCreator();
-//        sheetCreator.makeSheet();
 
 
     }

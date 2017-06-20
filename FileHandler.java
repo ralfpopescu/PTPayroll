@@ -215,9 +215,13 @@ public class FileHandler {
                 CC cc = new CC();
                 String name = "";
 
-                while (cellIterator.hasNext())
+                while (cellnum <= 6)
                 {
-                    Cell cell = cellIterator.next();
+                    Cell cell = row.getCell(cellnum, Row.RETURN_BLANK_AS_NULL);
+                    if(cell == null){
+                        cellnum++;
+                        continue;
+                    }
                     switch (cell.getCellType())
                     {
                         case Cell.CELL_TYPE_NUMERIC:
@@ -246,8 +250,7 @@ public class FileHandler {
                                 cc.setEmpName(name);
                             }
                             if(name.contains("Patio") || name.contains("patio") ||
-                                    ((name.contains("Front")) || name.contains("front") &&
-                                    (name.contains("Bar")) || name.contains("bar"))){
+                                    (name.contains("Front")) || name.contains("front")){
                                 cc.setIsBar(true);
                             }
 
@@ -309,8 +312,15 @@ public class FileHandler {
                             if(cellnum == 2){
                                 name = "Patio " + cellnum;
                             }
+                            if(cellnum == 4){
+                                if (cc.isBar()){
+                                    cc.setTips((float)cell.getNumericCellValue());
+                                }
+                            }
                             if(cellnum == 5){
-                                cc.setTips((float) cell.getNumericCellValue());
+                                if (!cc.isBar()) {
+                                    cc.setTips((float) cell.getNumericCellValue());
+                                }
                             }
                             if(cellnum == 6){
                                 cc.setSales((float) cell.getNumericCellValue());
@@ -358,24 +368,6 @@ public class FileHandler {
             return false;
         }
 
-//        boolean CC = false;
-//        Iterator<Cell> cellIterator = row.cellIterator();
-//
-//        while (cellIterator.hasNext())
-//        {
-//            Cell cell = cellIterator.next();
-//            switch (cell.getCellType())
-//            {
-//                case Cell.CELL_TYPE_NUMERIC:
-//
-//                    break;
-//                case Cell.CELL_TYPE_STRING:
-//
-//                    break;
-//            }
-//        }
-//
-//        return true;
 
     }
 
@@ -437,33 +429,42 @@ public class FileHandler {
         }
     }
 
-//    public void alphabetizeEmployees(){
-//        try {
-//            FileInputStream fstream = new FileInputStream("/Users/ralfpopescu/PTPayroll/src/sample/EmployeeKeys3.txt");
-//            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-//            ArrayList<String> names = new ArrayList<String>();
-//
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                String[] split = line.split("\\s");
-//                String name = split[1] + split[2] + split[0];
-//                names.add(name);
-//            }
-//            Collections.sort(names);
-//            try{
-//                PrintWriter writer = new PrintWriter("the-file-name.txt", "UTF-8");
-//                for(String name: names){
-//                    System.out.println(name);
-//                    writer.println(name);
-//                }
-//            } catch (IOException e) {
-//                // do something
-//            }
-//
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
+    public File csvToXLSX(File f) {
+        try {
+            String csvFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/CC3.csv"; //csv file address
+            String xlsxFileAddress = "CC3.xlsx"; //xlsx file address
+            XSSFWorkbook workBook = new XSSFWorkbook();
+            XSSFSheet sheet = workBook.createSheet("sheet1");
+            String currentLine=null;
+            int RowNum=0;
+            BufferedReader br = new BufferedReader(new FileReader(f));
+            while ((currentLine = br.readLine()) != null) {
+                String str[] = currentLine.split(",");
+                RowNum++;
+                XSSFRow currentRow=sheet.createRow(RowNum);
+                for(int i=0;i<str.length;i++){
+                    String s = str[i];
+                    s = s.replace("\"", "");
+                    if(isParsable(s)){
+                        currentRow.createCell(i).setCellValue(Float.parseFloat(s));
+                    } else {
+                        if(!s.equals(" ")) {
+                            currentRow.createCell(i).setCellValue(s);
+                        }
+                    }
+                }
+            }
+
+            FileOutputStream fileOutputStream =  new FileOutputStream(xlsxFileAddress);
+            workBook.write(fileOutputStream);
+            fileOutputStream.close();
+            System.out.println("Done");
+            return f;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage() + "Exception in try");
+        }
+        return f;
+    }
 
 
     public static boolean isParsable(String input){
@@ -633,6 +634,10 @@ public class FileHandler {
         return hashInfos;
     }
 
+    public void writeToEmployees(){
+
+    }
+
     public ArrayList<CC> handleCC(File f){
         String xlsxFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/CC3.xlsx";
 
@@ -673,12 +678,18 @@ public class FileHandler {
                             if(cellnum == 2){
                                 name = "Patio " + cellnum;
                             }
+                            if(cellnum == 4){
+                                if (cc.isBar()){
+                                    cc.setTips((float)cell.getNumericCellValue());
+                                }
+                            }
                             if(cellnum == 5){
                                 cc.setTips((float) cell.getNumericCellValue());
                             }
                             if(cellnum == 6){
                                 cc.setSales((float) cell.getNumericCellValue());
                             }
+                            cc.setTips(100);
 
                             break;
                         case Cell.CELL_TYPE_STRING:

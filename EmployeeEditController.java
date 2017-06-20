@@ -46,9 +46,14 @@ public class EmployeeEditController {
     public void populateList(){
         FileHandler fileHandler = new FileHandler();
         HashMap<String, Integer> empKeys = fileHandler.getEmpKeys();
-        ObservableList<String> items =FXCollections.observableArrayList (
+        ObservableList<String> items =FXCollections.observableArrayList(
                 empKeys.keySet());
         EmployeeList.setItems(items);
         EmployeeList.setEditable(true);
+    }
+
+
+    public void updateTextFile(){
+        FileHandler fileHandler = new FileHandler();
     }
 }

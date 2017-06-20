@@ -36,6 +36,8 @@ public class PayrollController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(sceneController.getStage());
+        FileHandler fh = new FileHandler();
+        fh.csvToXLSX(file);
         state.setAlohaFile(file);
         AlohaText.setText(file.getName());
 

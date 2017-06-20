@@ -48,7 +48,7 @@ public class SheetCreator {
         first.createCell(5).setCellValue("LaborValue1");
         first.createCell(6).setCellValue("E_Regular_Hours");
         first.createCell(7).setCellValue("E_Regular_ORRate");
-        first.createCell(8).setCellValue("E_Average_OT_Hours");
+        first.createCell(8).setCellValue("E_Average OT_Hours");
         first.createCell(9).setCellValue("E_Salary_Dollars");
         first.createCell(10).setCellValue("E_Commission_Dollars");
         first.createCell(11).setCellValue("E_Sub Minimum Reg_Hours");
@@ -70,7 +70,7 @@ public class SheetCreator {
         divisionCoder.put("Busser","09");
         divisionCoder.put("Barback","09");
         divisionCoder.put("Inventory","09");
-        divisionCoder.put("Dishwasher","09");
+        divisionCoder.put("Dishwasher","10");
         divisionCoder.put("Manager Salary","11");
         divisionCoder.put("Bartender","12");
         divisionCoder.put("Service","12");
@@ -80,7 +80,7 @@ public class SheetCreator {
         divisionCoder.put("Banquet Bartender","20");
         divisionCoder.put("Banquet Dishwasher","21");
         divisionCoder.put("Sushi","24");
-        divisionCoder.put("Banquet Cook","24");
+        divisionCoder.put("Banquet Cook","25");
         divisionCoder.put("Ice Rink","26");
         divisionCoder.put("Basecamp","27");
         divisionCoder.put("Parking","28");
@@ -99,12 +99,12 @@ public class SheetCreator {
 
 
         float barTotal = 0;
-        for (int k = 0;  k < CCs.size(); k++){
-            CC cc = CCs.get(k);
-            String ccName = cc.getEmpName();
+        for(String key: CCHashmap.keySet()){
+            CC cc = CCHashmap.get(key);
 
             if(cc.isBar()){
                 barTotal += cc.getTips();
+                System.out.println(cc.getEmpName() + " " + cc.getTips());
             }
         }
 
@@ -123,6 +123,7 @@ public class SheetCreator {
             ArrayList<EmployeePositionInfo> posInfos = positionInfos.get(name);
 
             if(empHourList != null) {
+                empHourList = sortEmpHourList(empHourList);
                 for (int j = 0; j < empHourList.size(); j++){
                     if(j == 0) {
                         EmployeeHourInfo ehi = empHourList.get(0);
@@ -150,11 +151,11 @@ public class SheetCreator {
                         empRow.createCell(3).setCellValue(empKey);
                         empRow.createCell(4).setCellValue(name);
                         if(isSubMin(position)){
-                            empRow.createCell(11).setCellValue(empHourList.get(0).getRegHours());
-                            empRow.createCell(12).setCellValue(empHourList.get(0).getOTHours());
+                            empRow.createCell(11).setCellValue(Math.round(empHourList.get(0).getRegHours()*100.0)/100.0);
+                            empRow.createCell(12).setCellValue(Math.round(empHourList.get(0).getOTHours()*100.0)/100.0);
                         } else {
-                            empRow.createCell(6).setCellValue(empHourList.get(0).getRegHours());
-                            empRow.createCell(8).setCellValue(empHourList.get(0).getOTHours());
+                            empRow.createCell(6).setCellValue(Math.round(empHourList.get(0).getRegHours()*100.0)/100.0);
+                            empRow.createCell(8).setCellValue(Math.round(empHourList.get(0).getOTHours()*100.0)/100.0);
                         }
 
                         empRow.createCell(7).setCellValue(Math.floor(epi.getHourlyRate() * 100) / 100);
@@ -216,11 +217,11 @@ public class SheetCreator {
                         }
 
                         if(isSubMin(position)){
-                            empRow2.createCell(11).setCellValue(ehi.getRegHours());
-                            empRow2.createCell(12).setCellValue(ehi.getOTHours());
+                            empRow2.createCell(11).setCellValue(Math.round(ehi.getRegHours()*100.0)/100.0);
+                            empRow2.createCell(12).setCellValue(Math.round(ehi.getOTHours()*100.0)/100.0);
                         } else {
-                            empRow2.createCell(6).setCellValue(ehi.getRegHours());
-                            empRow2.createCell(8).setCellValue(ehi.getOTHours());
+                            empRow2.createCell(6).setCellValue(Math.round(ehi.getRegHours()*100.0)/100.0);
+                            empRow2.createCell(8).setCellValue(Math.round(ehi.getOTHours()*100.0)/100.0);
                         }
 
                         empRow2.createCell(7).setCellValue(Math.floor(epi.getHourlyRate() * 100) / 100);
@@ -308,5 +309,24 @@ public class SheetCreator {
 
         }
         return barTipsByName;
+    }
+
+    private ArrayList<EmployeeHourInfo> sortEmpHourList(ArrayList<EmployeeHourInfo> list){
+        ArrayList<EmployeeHourInfo> newList = new ArrayList<EmployeeHourInfo>();
+        int size = list.size();
+        EmployeeHourInfo most = list.get(0);
+        float mostfloat = -1;
+        for(int i = 0; i < size; i++){
+            for(EmployeeHourInfo ehi : list){
+                if(ehi.getRegHours() > mostfloat){
+                    most = ehi;
+                    mostfloat = ehi.getRegHours();
+                }
+            }
+            list.remove(most);
+            mostfloat = -1;
+            newList.add(most);
+        }
+        return newList;
     }
 }
