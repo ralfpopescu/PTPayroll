@@ -59,6 +59,7 @@ public class CC {
     }
 
     public void setIsBar(boolean x){
+        System.out.println(x);
         bar = x;
     }
 

@@ -331,16 +331,18 @@ public class FileHandler {
                             //System.out.println(cell.getStringCellValue());
                             if (cellnum == 2){
                                 name = cell.getStringCellValue();
+                                if(name.contains("ISBAR")){
+                                    cc.setIsBar(true);
+                                }
                             }
                             if(cellnum == 3){
                                 name += "," + cell.getStringCellValue();
                                 cc.setEmpName(name);
+                                if(name.contains("ISBAR")){
+                                    cc.setIsBar(true);
+                                }
                             }
-                            if(name.contains("Patio") || name.contains("patio") ||
-                                    ((name.contains("Front")) || name.contains("front") &&
-                                            (name.contains("Bar")) || name.contains("bar"))){
-                                cc.setIsBar(true);
-                            }
+
 
                             break;
                     }
@@ -609,6 +611,9 @@ public class FileHandler {
                                 } else {
                                     //name = split[0];
                                     name = split[0];
+                                }
+                                if(hashInfos.get(name) != null){ //if employee has another location, this will fetch their other location infos
+                                    individualInfos = hashInfos.get(name);
                                 }
                             }
                             if(cellnum == 2){

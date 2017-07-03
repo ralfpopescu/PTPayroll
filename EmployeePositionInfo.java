@@ -7,6 +7,7 @@ public class EmployeePositionInfo {
 
     String name;
     String position;
+    String location;
     float hourlyRate = 0;
 
     public EmployeePositionInfo(){
@@ -31,5 +32,11 @@ public class EmployeePositionInfo {
     }
     public float getHourlyRate(){
         return hourlyRate;
+    }
+    public String getLocation(){
+        return location;
+    }
+    public void setLocation(String x){
+        location = x;
     }
 }

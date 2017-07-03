@@ -8,6 +8,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import javafx.scene.control.TextField;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by ralfpopescu on 6/7/17.
@@ -46,10 +48,29 @@ public class EmployeeEditController {
     public void populateList(){
         FileHandler fileHandler = new FileHandler();
         HashMap<String, Integer> empKeys = fileHandler.getEmpKeys();
+        Set<String> keyList = empKeys.keySet();
+        Set<String> namePlusKey = new TreeSet<String>();
+        for(String name: keyList){
+            Integer key = empKeys.get(name);
+            String item = name + tabSpace(name) + key;
+            namePlusKey.add(item);
+        }
         ObservableList<String> items =FXCollections.observableArrayList(
-                empKeys.keySet());
+                namePlusKey);
         EmployeeList.setItems(items);
         EmployeeList.setEditable(true);
+    }
+
+    public String tabSpace(String name){
+        if(name.length() < 16) {
+            return "\t \t \t \t";
+        } else if(name.length() < 22){
+            return "\t \t \t";
+        } else if(name.length() < 28){
+            return "\t \t";
+        } else {
+            return "\t";
+        }
     }
 
 
