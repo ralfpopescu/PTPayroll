@@ -20,6 +20,11 @@ import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import java.text.SimpleDateFormat;
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
 import org.apache.poi.xssf.usermodel.XSSFFont;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.nio.charset.Charset;
+import javafx.collections.ObservableList;
 
 /**
  * Created by ralfpopescu on 5/22/17.
@@ -375,9 +380,9 @@ public class FileHandler {
 
     public HashMap<String, Integer> getEmpKeys(){
         HashMap<String, Integer> empKeys = new HashMap<String, Integer>();
-        String textFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/EmployeeKeys3.txt";
+        String textFileAddress = "EmployeeKeys3.txt";
         try {
-            FileInputStream fstream = new FileInputStream("/Users/ralfpopescu/PTPayroll/src/sample/EmployeeKeys3.txt");
+            FileInputStream fstream = new FileInputStream("EmployeeKeys3.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
             String line;
@@ -727,6 +732,16 @@ public class FileHandler {
         }
 
         return CCs;
+
+    }
+
+    public void writeToEmployeeFile(ObservableList<String> employeeItems){
+        Path file = Paths.get("the-file-name.txt");
+        try {
+            Files.write(file, employeeItems, Charset.forName("UTF-8"));
+        } catch (Exception e){
+            System.out.println(e.getStackTrace());
+        }
 
     }
 }

@@ -43,6 +43,8 @@ public class EmployeeEditController {
     public void HandleDeleteEmployee(){
         int selectedIdx = EmployeeList.getSelectionModel().getSelectedIndex();
         EmployeeList.getItems().remove(selectedIdx);
+        FileHandler fileHandler = new FileHandler();
+        fileHandler.writeToEmployeeFile(EmployeeList.getItems());
     }
 
     public void populateList(){
@@ -62,11 +64,13 @@ public class EmployeeEditController {
     }
 
     public String tabSpace(String name){
-        if(name.length() < 16) {
+        if(name.length() < 14){
+            return "\t \t \t \t \t";
+        } else if(name.length() < 18) {
             return "\t \t \t \t";
         } else if(name.length() < 22){
             return "\t \t \t";
-        } else if(name.length() < 28){
+        } else if(name.length() < 26){
             return "\t \t";
         } else {
             return "\t";
