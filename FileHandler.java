@@ -313,14 +313,14 @@ public class FileHandler {
                                 name = "Patio " + cellnum;
                             }
                             if(cellnum == 4){
-                                if (cc.isBar()){
+                                if (cc.isBar() || true){
                                     cc.setTips((float)cell.getNumericCellValue());
                                 }
                             }
                             if(cellnum == 5){
-                                if (!cc.isBar()) {
-                                    cc.setTips((float) cell.getNumericCellValue());
-                                }
+//                                if (!cc.isBar()) {
+//                                    cc.setTips((float) cell.getNumericCellValue());
+//                                }
                             }
                             if(cellnum == 6){
                                 cc.setSales((float) cell.getNumericCellValue());
