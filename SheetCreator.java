@@ -85,6 +85,8 @@ public class SheetCreator {
         divisionCoder.put("Basecamp","27");
         divisionCoder.put("Parking","28");
 
+        divisionCoder = fileHandler.getDivisionCodes();
+
         rowNum++;
 
         HashMap<String, ArrayList<EmployeeHourInfo>> hourInfos = fileHandler.handleEmployeeHourInfos(state.getWhenIWorkFile());

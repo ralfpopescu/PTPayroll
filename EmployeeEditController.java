@@ -37,12 +37,18 @@ public class EmployeeEditController {
     public void HandleAddEmployee(){
         String name = NameText.getCharacters().toString();
         String num = KeyText.getCharacters().toString();
+        String line = num + "\t" + name;
         System.out.println(name + num);
+        ObservableList<String> items = EmployeeList.getItems();
+        items.add(line);
+        EmployeeList.setItems(items);
+        updateTextFile();
     }
 
     public void HandleDeleteEmployee(){
         int selectedIdx = EmployeeList.getSelectionModel().getSelectedIndex();
         EmployeeList.getItems().remove(selectedIdx);
+
     }
 
     public void populateList(){
@@ -52,7 +58,7 @@ public class EmployeeEditController {
         Set<String> namePlusKey = new TreeSet<String>();
         for(String name: keyList){
             Integer key = empKeys.get(name);
-            String item = name + tabSpace(name) + key;
+            String item = key + "\t" + name;
             namePlusKey.add(item);
         }
         ObservableList<String> items =FXCollections.observableArrayList(
@@ -76,5 +82,7 @@ public class EmployeeEditController {
 
     public void updateTextFile(){
         FileHandler fileHandler = new FileHandler();
+        ObservableList<String> items = EmployeeList.getItems();
+        fileHandler.writeToEmployeeFile(items);
     }
 }

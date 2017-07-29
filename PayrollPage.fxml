@@ -17,13 +17,11 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="34.0" prefWidth="288.0">
                      <children>
                         <Button layoutX="14.0" layoutY="17.0" mnemonicParsing="false" onAction="#HandleUploadWhenIWork" text="Upload WhenIWork Timesheet" />
-                        <CheckBox layoutX="236.0" layoutY="22.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="38.0" />
                      </children>
                   </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                      <children>
                         <Button fx:id="UploadAloha" layoutX="83.0" layoutY="18.0" mnemonicParsing="false" onAction="#HandleUploadAloha" text="Upload Aloha Credit Card CSV" />
-                        <CheckBox layoutX="34.0" layoutY="23.0" mnemonicParsing="false" />
                      </children>
                   </AnchorPane>
               </items>
@@ -67,18 +65,14 @@
    <top>
       <BorderPane prefHeight="200.0" prefWidth="700.0" BorderPane.alignment="CENTER">
          <center>
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+            <ImageView fitHeight="310.0" fitWidth="310.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <image>
                   <Image url="./sample/parktavernlogo.png" />
                </image>
             </ImageView>
          </center>
          <top>
-            <ToolBar prefHeight="18.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-              <items>
-                <Button mnemonicParsing="false" onAction="#HandleUploadWhenIWork" text="Options" />
-              </items>
-            </ToolBar>
+            <ToolBar prefHeight="18.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
          </top>
       </BorderPane>
    </top>

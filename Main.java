@@ -22,6 +22,7 @@ public class Main extends Application {
         Parent root = loader.load();
         primaryStage.setTitle("Park Tavern Payroll");
         Scene payroll = new Scene(root, 700, 600);
+        payroll.getStylesheets().add("style.css");
         primaryStage.setScene(payroll);
         primaryStage.show();
 

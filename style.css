@@ -1,0 +1,12 @@
+.root{
+    -fx-font-size: 11pt;
+    -fx-font-family: "Arial";
+    -fx-base: rgb(0, 136, 106);
+    -fx-background: rgb(108, 178, 160);
+}
+
+#MakePayroll{
+-fx-font-weight: bold;
+-fx-font-size: 14pt;
+
+}

@@ -20,6 +20,11 @@ import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import java.text.SimpleDateFormat;
 import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
 import org.apache.poi.xssf.usermodel.XSSFFont;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.nio.charset.Charset;
+import javafx.collections.ObservableList;
 
 /**
  * Created by ralfpopescu on 5/22/17.
@@ -639,9 +644,34 @@ public class FileHandler {
         return hashInfos;
     }
 
-    public void writeToEmployees(){
+    public void writeToEmployeeFile(ObservableList<String> employeeItems){
+        Path file = Paths.get("the-file-name.txt");
+        try {
+            Files.write(file, employeeItems, Charset.forName("UTF-8"));
+        } catch (Exception e){
+            System.out.println(e.getStackTrace());
+            }
 
+        }
+
+    public HashMap<String,String> getDivisionCodes(){
+        HashMap<String,String> divisionCodes = new HashMap<String, String>();
+        try {
+            FileInputStream fstream = new FileInputStream("DivisionCoder.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] split = line.split(",");
+                divisionCodes.put(split[0], split[1]);
+            }
+
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return divisionCodes;
     }
+
 
     public ArrayList<CC> handleCC(File f){
         String xlsxFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/CC3.xlsx";
