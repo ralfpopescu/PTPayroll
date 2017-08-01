@@ -279,6 +279,7 @@ public class FileHandler {
 
     public HashMap<String, CC> hashCC(File f){
         String xlsxFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/CC3.xlsx";
+        f = new File("CC_converted.xlsx");
 
         ArrayList<CC> CCs = new ArrayList<CC>();
         HashMap<String, CC> hashCCs = new HashMap<String, CC>();
@@ -438,11 +439,10 @@ public class FileHandler {
 
     public File csvToXLSX(File f) {
         try {
-            String csvFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/CC3.csv"; //csv file address
-            String xlsxFileAddress = "CC3.xlsx"; //xlsx file address
+            String xlsxFileAddress = "CC_converted.xlsx"; //xlsx file address
             XSSFWorkbook workBook = new XSSFWorkbook();
             XSSFSheet sheet = workBook.createSheet("sheet1");
-            String currentLine=null;
+            String currentLine;
             int RowNum=0;
             BufferedReader br = new BufferedReader(new FileReader(f));
             while ((currentLine = br.readLine()) != null) {
@@ -653,6 +653,16 @@ public class FileHandler {
             }
 
         }
+
+    public void writeToPositionFile(ObservableList<String> positionItems){
+        Path file = Paths.get("the-file-name.txt");
+        try {
+            Files.write(file, positionItems, Charset.forName("UTF-8"));
+        } catch (Exception e){
+            System.out.println(e.getStackTrace());
+        }
+
+    }
 
     public HashMap<String,String> getDivisionCodes(){
         HashMap<String,String> divisionCodes = new HashMap<String, String>();

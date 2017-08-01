@@ -58,6 +58,7 @@ public class PayrollController {
 
     }
     public void HandleAddEditPositions(){
+        sceneController.PositionScene();
 
     }
     public void HandleMakePayroll(){

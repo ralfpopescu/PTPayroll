@@ -58,10 +58,18 @@ public class SceneController {
 
     public void PositionScene(){
         try {
-            Scene scene = FXMLLoader.load(getClass().getResource("PayrollPage.fxml"));
-            primaryStage.setScene(scene);
-        } catch (Exception e){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("PositionEditPage.fxml"));
+            loader.setRoot(loader.getRoot());
+            Parent root = loader.load();
 
+            PositionEditController controller = loader.getController();
+            controller.giveSceneController(this);
+            controller.giveState(state);
+            controller.populateList();
+
+            primaryStage.getScene().setRoot(root);
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 
