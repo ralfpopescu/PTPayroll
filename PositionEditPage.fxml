@@ -14,7 +14,7 @@
          <children>
             <TextField fx:id="PositionText" layoutX="71.0" layoutY="14.0" prefHeight="27.0" prefWidth="181.0" promptText="Position Name:" />
             <Button fx:id="AddEmployeeButton" layoutX="419.0" layoutY="14.0" mnemonicParsing="false" onAction="#HandleAddPosition" text="Add Position" />
-            <TextField fx:id="KeyText" layoutX="308.0" layoutY="14.0" prefHeight="27.0" prefWidth="75.0" promptText="Code:" />
+            <TextField fx:id="CodeText" layoutX="308.0" layoutY="14.0" prefHeight="27.0" prefWidth="75.0" promptText="Code:" />
             <Button fx:id="BackButton" layoutX="252.0" layoutY="64.0" mnemonicParsing="false" onAction="#HandleBackButton" text="Back" />
             <Button fx:id="DeletePosition" layoutX="419.0" layoutY="51.0" mnemonicParsing="false" onAction="#HandleDeletePosition" text="Delete Selected" />
          </children></AnchorPane>

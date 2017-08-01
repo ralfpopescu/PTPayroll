@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import java.io.File;
@@ -36,18 +37,23 @@ public class PayrollController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(sceneController.getStage());
-        FileHandler fh = new FileHandler();
-        fh.csvToXLSX(file);
-        state.setAlohaFile(file);
-        AlohaText.setText(file.getName());
+
+        if(file != null) {
+            FileHandler fh = new FileHandler();
+            fh.csvToXLSX(file);
+            state.setAlohaFile(file);
+            AlohaText.setText(file.getName());
+        }
 
     }
     public void HandleUploadWhenIWork(){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(sceneController.getStage());
-        state.setWhenIWorkFile(file);
-        WhenIWorkText.setText(file.getName());
+        if(file != null) {
+            state.setWhenIWorkFile(file);
+            WhenIWorkText.setText(file.getName());
+        }
 
     }
     public void HandleAddEditEmployees(){
@@ -63,6 +69,13 @@ public class PayrollController {
     }
     public void HandleMakePayroll(){
         state.getSheetCreator().makeSheet();
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText("Success!");
+        alert.setContentText("Payroll made.");
+
+        alert.showAndWait();
     }
 
     public void test(){

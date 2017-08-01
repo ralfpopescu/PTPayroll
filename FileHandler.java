@@ -381,9 +381,10 @@ public class FileHandler {
 
     public HashMap<String, Integer> getEmpKeys(){
         HashMap<String, Integer> empKeys = new HashMap<String, Integer>();
-        String textFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/EmployeeKeys3.txt";
+        String textFileAddress = "Employees.txt";
         try {
             FileInputStream fstream = new FileInputStream("/Users/ralfpopescu/PTPayroll/src/sample/EmployeeKeys3.txt");
+            fstream = new FileInputStream(textFileAddress);
             BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
             String line;
@@ -645,7 +646,7 @@ public class FileHandler {
     }
 
     public void writeToEmployeeFile(ObservableList<String> employeeItems){
-        Path file = Paths.get("the-file-name.txt");
+        Path file = Paths.get("Employees.txt");
         try {
             Files.write(file, employeeItems, Charset.forName("UTF-8"));
         } catch (Exception e){
@@ -655,7 +656,7 @@ public class FileHandler {
         }
 
     public void writeToPositionFile(ObservableList<String> positionItems){
-        Path file = Paths.get("the-file-name.txt");
+        Path file = Paths.get("Positions.txt");
         try {
             Files.write(file, positionItems, Charset.forName("UTF-8"));
         } catch (Exception e){
@@ -667,7 +668,7 @@ public class FileHandler {
     public HashMap<String,String> getDivisionCodes(){
         HashMap<String,String> divisionCodes = new HashMap<String, String>();
         try {
-            FileInputStream fstream = new FileInputStream("DivisionCoder.txt");
+            FileInputStream fstream = new FileInputStream("Positions.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
             String line;
@@ -683,90 +684,4 @@ public class FileHandler {
     }
 
 
-    public ArrayList<CC> handleCC(File f){
-        String xlsxFileAddress = "/Users/ralfpopescu/PTPayroll/src/sample/CC3.xlsx";
-
-        ArrayList<CC> CCs = new ArrayList<CC>();
-        HashMap<String, CC> hashCCs = new HashMap<String, CC>();
-
-        try {
-            FileInputStream fis = new FileInputStream(f);
-            XSSFWorkbook workbook = new XSSFWorkbook(fis);
-            XSSFSheet spreadsheet = workbook.getSheetAt(0);
-
-            Iterator<Row> rowIterator = spreadsheet.iterator();
-            XSSFRow row;
-
-            while (rowIterator.hasNext())
-            {
-                row = (XSSFRow) rowIterator.next();
-
-                if(!isCCRow(row)){ //skip row unless it is a valid row
-                    continue;
-                }
-
-                Iterator<Cell> cellIterator = row.cellIterator();
-                int cellnum = 0;
-                CC cc = new CC();
-                String name = "";
-
-                while (cellIterator.hasNext())
-                {
-                    Cell cell = cellIterator.next();
-                    switch (cell.getCellType())
-                    {
-                        case Cell.CELL_TYPE_NUMERIC:
-                            //System.out.println(cell.getNumericCellValue());
-                            if (cellnum == 1){
-                                cc.setEmpID((int)cell.getNumericCellValue());
-                            }
-                            if(cellnum == 2){
-                                name = "Patio " + cellnum;
-                            }
-                            if(cellnum == 4){
-                                if (cc.isBar()){
-                                    cc.setTips((float)cell.getNumericCellValue());
-                                }
-                            }
-                            if(cellnum == 5){
-                                cc.setTips((float) cell.getNumericCellValue());
-                            }
-                            if(cellnum == 6){
-                                cc.setSales((float) cell.getNumericCellValue());
-                            }
-                            cc.setTips(100);
-
-                            break;
-                        case Cell.CELL_TYPE_STRING:
-                            //System.out.println(cell.getStringCellValue());
-                            if (cellnum == 2){
-                                name = cell.getStringCellValue();
-                            }
-                            if(cellnum == 3){
-                                name += "," + cell.getStringCellValue();
-                                cc.setEmpName(name);
-                            }
-                            if(name.contains("Patio") || name.contains("patio") ||
-                                    ((name.contains("Front")) || name.contains("front") &&
-                                            (name.contains("Bar")) || name.contains("bar"))){
-                                cc.setIsBar(true);
-                            }
-
-                            break;
-                    }
-                    cellnum++;
-                }
-
-                CCs.add(cc);
-                hashCCs.put(name,cc);
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return CCs;
-
-    }
 }

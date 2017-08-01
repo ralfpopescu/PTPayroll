@@ -36,7 +36,6 @@ public class PositionEditController {
         String name = PositionText.getCharacters().toString();
         String num = CodeText.getCharacters().toString();
         String line = num + "\t" + name;
-        System.out.println(name + num);
         ObservableList<String> items = PositionList.getItems();
         items.add(line);
         PositionList.setItems(items);
@@ -46,6 +45,7 @@ public class PositionEditController {
     public void HandleDeletePosition(){
         int selectedIdx = PositionList.getSelectionModel().getSelectedIndex();
         PositionList.getItems().remove(selectedIdx);
+        updateTextFile();
 
     }
 
@@ -65,23 +65,31 @@ public class PositionEditController {
         PositionList.setEditable(true);
     }
 
-    public String tabSpace(String name){
-        if(name.length() < 16) {
-            return "\t \t \t \t";
-        } else if(name.length() < 22){
-            return "\t \t \t";
-        } else if(name.length() < 28){
-            return "\t \t";
-        } else {
-            return "\t";
-        }
-    }
-
 
     public void updateTextFile(){
         FileHandler fileHandler = new FileHandler();
+        ListView<String> emptyList = new ListView<String>();
         ObservableList<String> items = PositionList.getItems();
-        fileHandler.writeToPositionFile(items);
+        ObservableList<String> modifiedItems = emptyList.getItems();
+
+        System.out.println("ay" + modifiedItems);
+
+        for(int j = 0; j < items.size(); j++){
+            String item = items.get(j);
+            String[] split = item.split("\\s");
+            String modifiedItem = "";
+            for (int i = 1; i < split.length; i++){
+                modifiedItem += split[i];
+                if(split.length > 2 && i < split.length - 1){
+                    modifiedItem += " ";
+                }
+            }
+            modifiedItem += "," + split[0];
+            modifiedItems.add(modifiedItem);
+
+        }
+
+        fileHandler.writeToPositionFile(modifiedItems);
     }
 }
 

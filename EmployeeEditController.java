@@ -36,6 +36,12 @@ public class EmployeeEditController {
     }
     public void HandleAddEmployee(){
         String name = NameText.getCharacters().toString();
+
+        if(!name.contains(",")){
+            String[] split = name.split(",");
+            name = split[1] + ", " + split[0];
+        }
+
         String num = KeyText.getCharacters().toString();
         String line = num + "\t" + name;
         System.out.println(name + num);
@@ -48,6 +54,7 @@ public class EmployeeEditController {
     public void HandleDeleteEmployee(){
         int selectedIdx = EmployeeList.getSelectionModel().getSelectedIndex();
         EmployeeList.getItems().remove(selectedIdx);
+        updateTextFile();
 
     }
 
