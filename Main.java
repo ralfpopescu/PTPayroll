@@ -13,7 +13,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         FileHandler fileHandler = new FileHandler();
-        fileHandler.csvToXLSX();
 
         State state = new State();
         state.setEmpKeys(fileHandler.getEmpKeys());

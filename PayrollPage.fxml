@@ -67,7 +67,7 @@
          <center>
             <ImageView fitHeight="310.0" fitWidth="310.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <image>
-                  <Image url="./sample/parktavernlogo.png" />
+                  <Image url="parktavernlogo.png" />
                </image>
             </ImageView>
          </center>
